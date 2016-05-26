@@ -8,6 +8,11 @@
     go run main.go
     ```
 
+3. Development run
+    ```
+    go get -u go get github.com/pilu/fresh
+    fresh
+    ```
 
 ## Environment Variables for Configuration
 
