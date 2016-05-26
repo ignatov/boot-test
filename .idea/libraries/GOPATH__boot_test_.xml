@@ -1,0 +1,23 @@
+<component name="libraryTable">
+  <library name="GOPATH &lt;boot-test&gt;">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../../apiproject" />
+      <root url="file://$PROJECT_DIR$/../.." />
+      <root url="file://$PROJECT_DIR$/../../../golang.org" />
+      <root url="file://$PROJECT_DIR$/../../../demo" />
+      <root url="file://$PROJECT_DIR$/../../../delve_test" />
+      <root url="file://$PROJECT_DIR$/../../../gopkg.in" />
+      <root url="file://$PROJECT_DIR$/../../../google.golang.org" />
+      <root url="file://$PROJECT_DIR$/../../../gonerics.io" />
+      <root url="file://$PROJECT_DIR$/../../../bitbucket.org" />
+      <root url="file://$PROJECT_DIR$/../../../code.google.com" />
+      <root url="file://$PROJECT_DIR$/../../../rest_test" />
+      <root url="file://$PROJECT_DIR$/../../../issue" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <excluded>
+      <root url="file://$PROJECT_DIR$" />
+    </excluded>
+  </library>
+</component>

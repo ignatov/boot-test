@@ -1,0 +1,14 @@
+{{define "content"}}
+<div class="container">
+  <div class="row">
+    <div class="jumbotron">
+      <h1>Hello, World!</h1>
+      <p>Welcome to your new Go web project.</p>
+      {{range .}}
+          <li><a href="{{.Name}}">{{.Count}} {{.Name}}</a></li>
+      {{end}}
+      <p></p>
+    </div>
+  </div>
+</div>
+{{end}}
