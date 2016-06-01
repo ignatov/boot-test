@@ -9,6 +9,7 @@ import (
 
 	"github.com/ignatov/boot-test/handlers"
 	"github.com/ignatov/boot-test/middlewares"
+	"github.com/GeertJohan/go.rice"
 )
 
 // New is the constructor for Application struct.
@@ -43,7 +44,7 @@ func (app *Application) mux() *gorilla_mux.Router {
 	router.Handle("/", http.HandlerFunc(handlers.GetHome)).Methods("GET")
 
 	// Path of static files must be last!
-	router.PathPrefix("/").Handler(http.FileServer(http.Dir("static")))
+	router.PathPrefix("/").Handler(http.FileServer(rice.MustFindBox("../static").HTTPBox()))
 
 	return router
 }
