@@ -5,6 +5,9 @@ import (
 	"html/template"
 	"net/http"
 	"github.com/GeertJohan/go.rice"
+	"github.com/docker/engine-api/client"
+	"github.com/docker/engine-api/types"
+	"golang.org/x/net/context"
 )
 
 func GetHome(w http.ResponseWriter, r *http.Request) {
@@ -21,21 +24,18 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	type Container struct {
-		Name  string
-		Count int
+	cli, err := client.NewClient("http://shstack.labs.intellij.net:2375", "v1.22", nil, nil)
+	if err != nil {
+		libhttp.HandleErrorJson(w, err)
+		return
 	}
 
-	sweaters := Container{
-		"wool123",
-		17,
+	options := types.ContainerListOptions{All: true}
+	containers, err := cli.ContainerList(context.Background(), options)
+	if err != nil {
+		libhttp.HandleErrorJson(w, err)
+		return
 	}
 
-	cts := []Container{
-		sweaters,
-		sweaters,
-		sweaters,
-	}
-
-	tmpl.Execute(w, cts)
+	tmpl.Execute(w, containers)
 }
