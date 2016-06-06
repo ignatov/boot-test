@@ -5,10 +5,25 @@ import (
 	"html/template"
 	"net/http"
 	"github.com/GeertJohan/go.rice"
-	"github.com/docker/engine-api/client"
+	docker_client "github.com/docker/engine-api/client"
 	"github.com/docker/engine-api/types"
 	"golang.org/x/net/context"
+	registry_client "github.com/docker/distribution/registry/client"
+	"io"
 )
+
+func GetRepositories(registry registry_client.Registry) ([]string, error) {
+	entriesBuf := make([]string, 10000)
+	numFilled, err := registry.Repositories(context.Background(), entriesBuf, "")
+	if err != io.EOF {
+		return nil, err
+	}
+
+	entries := make([]string, numFilled)
+	copy(entries, entriesBuf)
+
+	return entries, nil
+}
 
 func GetHome(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
@@ -24,7 +39,19 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cli, err := client.NewClient("http://shstack.labs.intellij.net:2375", "v1.22", nil, nil)
+	registry, err := registry_client.NewRegistry(context.Background(), "http://docker-registry.labs.intellij.net/", nil)
+	if err != nil {
+		libhttp.HandleErrorJson(w, err)
+		return
+	}
+
+	entries, err := GetRepositories(registry)
+	if err != nil {
+		libhttp.HandleErrorJson(w, err)
+		return
+	}
+
+	cli, err := docker_client.NewClient("http://shstack.labs.intellij.net:2375", "v1.22", nil, nil)
 	if err != nil {
 		libhttp.HandleErrorJson(w, err)
 		return
@@ -37,5 +64,10 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tmpl.Execute(w, containers)
+	type HomePageData struct {
+		Containers []types.Container
+		Images []string
+	}
+
+	tmpl.Execute(w, HomePageData{containers, entries})
 }
